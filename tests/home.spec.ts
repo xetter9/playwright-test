@@ -15,3 +15,16 @@ test('Home page', async ({ page }) => {
   expect(await productGrid.getByRole("link").count()).toBe(9);
 
 });
+
+test('Challenge', async ({ page }) => {
+  await page.goto('https://practicesoftwaretesting.com/');
+
+  const productGrid = page.locator(".col-md-9");
+  expect(await productGrid.getByRole("link").count()).toBe(9);
+
+  // Search for Thor Hammer and check the result
+  await page.getByTestId("search-query").fill("Thor Hammer");
+  await page.getByTestId("search-submit").click();
+  await expect(productGrid.getByRole("link")).toHaveCount(1);
+  await expect(page.getByAltText("Thor Hammer")).toBeVisible();
+});
