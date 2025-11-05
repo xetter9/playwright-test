@@ -18,13 +18,25 @@ test('Home page', async ({ page }) => {
 
 test('Challenge', async ({ page }) => {
   await page.goto('https://practicesoftwaretesting.com/');
+  
+  // Wait for the product grid to be visible
+  /*const productGrid = page.locator('.col-md-9');
+  await expect(productGrid).toBeVisible(); // Ensure the product grid is loaded
+ 
+  const links = productGrid.locator('a.product-link');
+  await expect(links).toHaveCount(9); // Check for 9 links*/
 
-  const productGrid = page.locator(".col-md-9");
-  expect(await productGrid.getByRole("link").count()).toBe(9);
+ //// const productGrid = page.locator('.product-list'); // Assuming the product list has this class
+  ////const links = productGrid.locator('a');
+const productGrid = page.locator('.col-md-9');
+const links = productGrid.locator('a[href*="product"]'); // Match links containing "product" in the href
 
+  await expect(links).toHaveCount(9);
+
+  
   // Search for Thor Hammer and check the result
   await page.getByTestId("search-query").fill("Thor Hammer");
   await page.getByTestId("search-submit").click();
-  await expect(productGrid.getByRole("link")).toHaveCount(1);
+  await expect(productGrid.locator('a')).toHaveCount(1); // Check for 1 link after search
   await expect(page.getByAltText("Thor Hammer")).toBeVisible();
 });
